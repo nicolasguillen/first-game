@@ -16,7 +16,6 @@ export function startGame(canvas, player) {
  */
 function gameLoop(canvas, context, options) {
     context.clearRect(0, 0, canvas.width, canvas.height)
-
     const height = canvas.height
     const heightPixels = Math.floor(height / HEIGHT)
 
