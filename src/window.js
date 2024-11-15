@@ -2,16 +2,21 @@ export const WIDTH = 32
 export const HEIGHT = 24
 
 /**
- * @param canvas {HTMLCanvasElement}
+ * @param {HTMLCanvasElement} canvas
+ * @param {CanvasProjectable} projectable
+ * @returns [number, number]
  */
-export function calculateCanvasPortions(canvas) {
-    return {
-        hUnits: canvas.height / HEIGHT,
-    }
+export function project(canvas, projectable) {
+    const normWidth = canvas.width / WIDTH
+    const normHeight = canvas.height / HEIGHT
+    projectable.renderX = Math.floor(projectable.pos.x * normWidth);
+    projectable.renderY = Math.floor(projectable.pos.y * normHeight);
+    projectable.renderWidth = Math.floor(projectable.width * normWidth);
+    projectable.renderHeight = Math.floor(projectable.height * normHeight);
 }
 
 /**
- * @param canvas {HTMLCanvasElement}
+ * @param {HTMLCanvasElement} canvas
  */
 export function resizeCanvas(canvas) {
     let width = window.innerWidth;
@@ -31,7 +36,7 @@ export function resizeCanvas(canvas) {
 }
 
 /**
- * @param canvas {HTMLCanvasElement}
+ * @param {HTMLCanvasElement} canvas
  */
 export function listenToChanges(canvas) {
     window.addEventListener("resize", function() {

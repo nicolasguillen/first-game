@@ -5,7 +5,8 @@
         "noEmit": true,
         "types": [
             "./src/types"
-        ]
+        ],
+        "target": "ESNext"
     },
     "include": [
         "**/*.js"

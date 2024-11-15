@@ -1,27 +1,41 @@
-import { HEIGHT } from "./window"
+import { listenToInput } from "./input/input.js";
+import * as Player from "./objects/player.js";
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {Player} player
+ * @param {GameOptions} gameopts
  */
-export function startGame(canvas, player) {
-    const context = canvas.getContext("2d")
-    gameLoop(canvas, context, {})
+export function startGame(canvas, gameopts) {
+    const context = canvas.getContext("2d");
+    const state = /** @type {GameState} */ {
+        opts: gameopts,
+        player: Player.createPlayer(gameopts.player),
+        loopStartTime: 0,
+        context,
+        input: [],
+    };
+    context.imageSmoothingEnabled = false;
+    listenToInput(state.input)
+    window.addEventListener("resize", function() {
+    });
+    gameLoop(state)
 }
 
 /**
- * @param {HTMLCanvasElement} canvas 
- * @param {CanvasRenderingContext2D} context 
- * @param {{}} options 
+ * @param {GameState} state 
+ * @returns {Promise}
  */
-function gameLoop(canvas, context, options) {
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    const height = canvas.height
-    const heightPixels = Math.floor(height / HEIGHT)
+async function gameLoop(state) {
+    let lastTime = Date.now();
+    while (true) {
+        await (new Promise(res => setTimeout(res, 33)));
+        const nextTime = Date.now();
+        state.loopStartTime = nextTime;
 
-    context.fillRect(0, 0, Math.floor(heightPixels / 2), heightPixels)
-
-    requestAnimationFrame(() => 
-        gameLoop(canvas, context, options)
-    )
+        const delta = nextTime - lastTime;
+        Player.update(state, delta);
+        state.context.clearRect(0, 0, state.context.canvas.width, state.context.canvas.height);
+        Player.render(state);
+        lastTime = nextTime;
+    }
 }

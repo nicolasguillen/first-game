@@ -1,5 +1,5 @@
 /**
- * @param out {KeyboardEvent[]}
+ * @param {KeyboardEvent[]} out
  */
 export function listenToInput(out) {
     window.addEventListener("keydown", function(event) {
